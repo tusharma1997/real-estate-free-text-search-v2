@@ -352,14 +352,14 @@ public class NlpParserService {
         List<Pattern> knownPatterns = new ArrayList<>(List.of(
                 Pattern.compile("\\d+\\s*(?:bhk|bhks|bedroom|bedrooms|bed\\b|br\\b)", Pattern.CASE_INSENSITIVE),
                 Pattern.compile("\\d+(?:\\.\\d+)?\\s*(?:lakh|lakhs|lac|lacs|crore|crores|cr|l\\b|k\\b)", Pattern.CASE_INSENSITIVE),
-                Pattern.compile("(?:under|below|upto|above|more than|starting|minimum|maximum|budget)\\b", Pattern.CASE_INSENSITIVE),
-                Pattern.compile("(?:sqft|sq\\s*ft|square\\s*feet|sq\\s*yard|gaj)", Pattern.CASE_INSENSITIVE),
-                Pattern.compile("(?:ready\\s*to\\s*move|under\\s*construction|new\\s*launch|rtm)", Pattern.CASE_INSENSITIVE),
-                Pattern.compile("(?:furnished|unfurnished|semi\\s*furnished)", Pattern.CASE_INSENSITIVE),
-                Pattern.compile("(?:for\\s*(?:sale|rent)|buy|purchase|rent|lease)", Pattern.CASE_INSENSITIVE),
-                Pattern.compile("\\d+\\s*(?:bath(?:room)?|washroom)", Pattern.CASE_INSENSITIVE),
-                Pattern.compile("(?:owner|by owner|direct owner|no broker|no brokerage|without broker|zero brokerage)", Pattern.CASE_INSENSITIVE),
-                Pattern.compile("(?:builder|developer|from builder)", Pattern.CASE_INSENSITIVE),
+                Pattern.compile("\\b(?:under|below|upto|above|more than|starting|minimum|maximum|budget)\\b", Pattern.CASE_INSENSITIVE),
+                Pattern.compile("\\b(?:sqft|sq\\s*ft|square\\s*feet|sq\\s*yard|gaj)\\b", Pattern.CASE_INSENSITIVE),
+                Pattern.compile("\\b(?:ready\\s*to\\s*move|under\\s*construction|new\\s*launch|rtm)\\b", Pattern.CASE_INSENSITIVE),
+                Pattern.compile("\\b(?:furnished|unfurnished|semi\\s*furnished)\\b", Pattern.CASE_INSENSITIVE),
+                Pattern.compile("\\b(?:for\\s*(?:sale|rent)|buy|purchase|rent|lease)\\b", Pattern.CASE_INSENSITIVE),
+                Pattern.compile("\\d+\\s*(?:bath(?:room)?|washroom)\\b", Pattern.CASE_INSENSITIVE),
+                Pattern.compile("\\b(?:owner|by owner|direct owner|no broker|no brokerage|without broker|zero brokerage)\\b", Pattern.CASE_INSENSITIVE),
+                Pattern.compile("\\b(?:builder|developer|from builder)\\b", Pattern.CASE_INSENSITIVE),
                 Pattern.compile("\\brk\\b", Pattern.CASE_INSENSITIVE),
                 Pattern.compile("\\brera\\b", Pattern.CASE_INSENSITIVE)
         ));
