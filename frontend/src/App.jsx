@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
+const API_BASE = import.meta.env.PROD
+  ? "https://real-estate-free-text-search-v2.onrender.com"
+  : "";
 const EXAMPLES = [
   "3bhk flat in bandra under 1 crore ready to move",
   "2bhk apartment in greater noida under 80 lakhs",
@@ -34,7 +37,7 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/parse", {
+      const res = await fetch(`${API_BASE}/api/parse`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: q, geoOverride }),
