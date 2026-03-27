@@ -150,22 +150,7 @@ public final class VocabularyData {
             1,"Corner Property", 2,"Park Facing", 3,"Road Facing", 4,"Roof Rights"
     );
 
-    // ─── BUDGET TIERS ─────────────────────────────────────────────────────────
-    public record BudgetTier(int id, long price, String label) {}
 
-    public static final List<BudgetTier> BUDGET_TIERS = List.of(
-            new BudgetTier(2,500000,"5L"), new BudgetTier(3,1000000,"10L"),
-            new BudgetTier(4,1500000,"15L"), new BudgetTier(5,2000000,"20L"),
-            new BudgetTier(6,2500000,"25L"), new BudgetTier(7,3000000,"30L"),
-            new BudgetTier(8,4000000,"40L"), new BudgetTier(9,5000000,"50L"),
-            new BudgetTier(10,6000000,"60L"), new BudgetTier(11,7500000,"75L"),
-            new BudgetTier(127,8000000,"80L"), new BudgetTier(128,8500000,"85L"),
-            new BudgetTier(12,9000000,"90L"), new BudgetTier(130,9500000,"95L"),
-            new BudgetTier(13,10000000,"1Cr"), new BudgetTier(14,15000000,"1.5Cr"),
-            new BudgetTier(15,20000000,"2Cr"), new BudgetTier(16,30000000,"3Cr"),
-            new BudgetTier(169,40000000,"4Cr"), new BudgetTier(17,50000000,"5Cr"),
-            new BudgetTier(18,100000000,"10Cr")
-    );
 
     // ─── GEOGRAPHIC DATA ──────────────────────────────────────────────────────
     public record GeoEntity(int id, String name, String type, Integer parentCityId, int listingCount) {}

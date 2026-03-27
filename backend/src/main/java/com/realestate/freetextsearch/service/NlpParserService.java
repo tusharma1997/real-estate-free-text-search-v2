@@ -154,12 +154,7 @@ public class NlpParserService {
         return m;
     }
 
-    // ─── BUDGET TIER ──────────────────────────────────────────────────────────
-    private BudgetTier getBudgetTier(long price) {
-        return VocabularyData.BUDGET_TIERS.stream()
-                .min(Comparator.comparingLong(t -> Math.abs(t.price() - price)))
-                .orElse(VocabularyData.BUDGET_TIERS.get(0));
-    }
+
 
     // ─── DICT FIND ────────────────────────────────────────────────────────────
     private record DictResult(String key, Object value, int dist, String original) {}
@@ -167,7 +162,7 @@ public class NlpParserService {
     private <V> DictResult dictFind(String text, Map<String, V> map, double threshold) {
         List<String> keys = new ArrayList<>(map.keySet());
         keys.sort((a, b) -> b.length() - a.length());
-        for (String k : keys) if (text.contains(k)) return new DictResult(k, map.get(k), 0, null);
+        for (String k : keys) if (Pattern.compile("\\b" + Pattern.quote(k) + "\\b").matcher(text).find()) return new DictResult(k, map.get(k), 0, null);
         FuzzyResult f = fuzzyFind(text, keys, threshold);
         if (f != null) return new DictResult(f.matched, map.get(f.matched), f.dist, f.window);
         return null;
@@ -192,7 +187,7 @@ public class NlpParserService {
         ptKeys.sort((a, b) -> b.length() - a.length());
         boolean ptFound = false;
         for (String k : ptKeys) {
-            if (text.contains(k)) {
+            if (Pattern.compile("\\b" + Pattern.quote(k) + "\\b").matcher(text).find()) {
                 int val = VocabularyData.PROPERTY_TYPE_MAP.get(k);
                 entities.put("propertyType", val);
                 entities.put("propertyTypeLabel", VocabularyData.PROPERTY_TYPE_LABELS.get(val));
@@ -239,10 +234,8 @@ public class NlpParserService {
             boolean isMin = dir != null && dir.matches("above|more than|starting.*|minimum|min|at least|from");
             if (isMin) {
                 entities.put("minPrice", price);
-                entities.put("minPriceTier", budgetTierToMap(getBudgetTier(price)));
             } else {
                 entities.put("maxPrice", price);
-                entities.put("maxPriceTier", budgetTierToMap(getBudgetTier(price)));
             }
         }
 
@@ -251,7 +244,7 @@ public class NlpParserService {
         possKeys.sort((a, b) -> b.length() - a.length());
         boolean possFound = false;
         for (String k : possKeys) {
-            if (text.contains(k)) {
+            if (Pattern.compile("\\b" + Pattern.quote(k) + "\\b").matcher(text).find()) {
                 entities.put("possession", VocabularyData.POSSESSION_MAP.get(k));
                 entities.put("possessionLabel", VocabularyData.POSSESSION_LABELS.get(VocabularyData.POSSESSION_MAP.get(k)));
                 possFound = true; break;
@@ -270,7 +263,7 @@ public class NlpParserService {
         List<String> furnKeys = new ArrayList<>(VocabularyData.FURNISH_MAP.keySet());
         furnKeys.sort((a, b) -> b.length() - a.length());
         for (String k : furnKeys) {
-            if (text.contains(k)) {
+            if (Pattern.compile("\\b" + Pattern.quote(k) + "\\b").matcher(text).find()) {
                 entities.put("furnish", VocabularyData.FURNISH_MAP.get(k));
                 entities.put("furnishLabel", VocabularyData.FURNISH_LABELS.get(VocabularyData.FURNISH_MAP.get(k)));
                 break;
@@ -282,7 +275,7 @@ public class NlpParserService {
         List<String> amenKeys = new ArrayList<>(VocabularyData.AMENITY_MAP.keySet());
         amenKeys.sort((a, b) -> b.length() - a.length());
         for (String k : amenKeys) {
-            if (text.contains(k)) {
+            if (Pattern.compile("\\b" + Pattern.quote(k) + "\\b").matcher(text).find()) {
                 int id = VocabularyData.AMENITY_MAP.get(k);
                 if (amenities.stream().noneMatch(a -> a.get("id").equals(id)))
                     amenities.add(Map.of("id", id, "label", VocabularyData.AMENITY_LABELS.getOrDefault(id, k)));
@@ -294,7 +287,7 @@ public class NlpParserService {
         List<String> facKeys = new ArrayList<>(VocabularyData.FACING_MAP.keySet());
         facKeys.sort((a, b) -> b.length() - a.length());
         for (String k : facKeys) {
-            if (text.contains(k)) {
+            if (Pattern.compile("\\b" + Pattern.quote(k) + "\\b").matcher(text).find()) {
                 entities.put("facing", VocabularyData.FACING_MAP.get(k));
                 entities.put("facingLabel", VocabularyData.FACING_LABELS.get(VocabularyData.FACING_MAP.get(k)));
                 break;
@@ -305,7 +298,7 @@ public class NlpParserService {
         List<String> pfKeys = new ArrayList<>(VocabularyData.PROPERTY_FEATURE_MAP.keySet());
         pfKeys.sort((a, b) -> b.length() - a.length());
         for (String k : pfKeys) {
-            if (text.contains(k)) {
+            if (Pattern.compile("\\b" + Pattern.quote(k) + "\\b").matcher(text).find()) {
                 entities.put("propertyFeature", VocabularyData.PROPERTY_FEATURE_MAP.get(k));
                 entities.put("propertyFeatureLabel", VocabularyData.PROPERTY_FEATURE_LABELS.get(VocabularyData.PROPERTY_FEATURE_MAP.get(k)));
                 break;
@@ -410,9 +403,7 @@ public class NlpParserService {
         return response;
     }
 
-    private Map<String, Object> budgetTierToMap(BudgetTier t) {
-        return Map.of("id", t.id(), "price", t.price(), "label", t.label());
-    }
+
 
     @SuppressWarnings("unchecked")
     private Map<String, Object> buildParams(Map<String, Object> e) {
@@ -433,16 +424,8 @@ public class NlpParserService {
         if (e.containsKey("bedroom")) p.put("bedroom_num", e.get("bedroom"));
         if (e.containsKey("propertyType")) p.put("property_type", e.get("propertyType"));
         p.put("preference", e.getOrDefault("preference", "S"));
-        if (e.containsKey("maxPriceTier")) {
-            Map<String, Object> tier = (Map<String, Object>) e.get("maxPriceTier");
-            p.put("budget_max", tier.get("id"));
-            p.put("maxPrice", e.get("maxPrice"));
-        }
-        if (e.containsKey("minPriceTier")) {
-            Map<String, Object> tier = (Map<String, Object>) e.get("minPriceTier");
-            p.put("budget_min", tier.get("id"));
-            p.put("minPrice", e.get("minPrice"));
-        }
+        if (e.containsKey("maxPrice")) p.put("maxPrice", e.get("maxPrice"));
+        if (e.containsKey("minPrice")) p.put("minPrice", e.get("minPrice"));
         if (e.containsKey("possession")) p.put("availability", e.get("possession"));
         if (e.containsKey("furnish")) p.put("furnish", e.get("furnish"));
         if (e.containsKey("amenities")) {

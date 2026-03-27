@@ -294,29 +294,7 @@ export default function App() {
               </Section>
             )}
 
-            {/* Budget Tier */}
-            {!isAmbiguous && (e.maxPriceTier || e.minPriceTier) && (
-              <Section title="budgetTierMapping" dot="#f97316">
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {e.maxPriceTier && (
-                    <div style={{ fontSize: 12, color: "#c9d1e0" }}>
-                      <span style={{ color: "#3b82f6" }}>budget_max</span>
-                      <span style={{ color: "#4b5563", margin: "0 8px" }}>→</span>
-                      <span style={{ color: "#f97316", fontWeight: 600 }}>tier id {e.maxPriceTier.id}</span>
-                      <span style={{ color: "#4b5563", marginLeft: 8 }}>({e.maxPriceTier.label})</span>
-                    </div>
-                  )}
-                  {e.minPriceTier && (
-                    <div style={{ fontSize: 12, color: "#c9d1e0" }}>
-                      <span style={{ color: "#3b82f6" }}>budget_min</span>
-                      <span style={{ color: "#4b5563", margin: "0 8px" }}>→</span>
-                      <span style={{ color: "#f97316", fontWeight: 600 }}>tier id {e.minPriceTier.id}</span>
-                      <span style={{ color: "#4b5563", marginLeft: 8 }}>({e.minPriceTier.label})</span>
-                    </div>
-                  )}
-                </div>
-              </Section>
-            )}
+
 
             {/* Solr Params */}
             {!isAmbiguous && (
