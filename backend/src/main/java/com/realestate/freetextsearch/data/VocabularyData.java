@@ -58,7 +58,7 @@ public final class VocabularyData {
     // ─── POSSESSION ───────────────────────────────────────────────────────────
     public static final Map<String, Integer> POSSESSION_MAP = new LinkedHashMap<>();
     static {
-        for (String k : new String[]{"ready to move","ready-to-move","rtm","rdy to move","immediate possession",
+        for (String k : new String[]{"ready to move","ready-to-move","rtm","immediate possession",
                 "immediate","move in ready","possession ready","ready possession","available immediately","ready"})
             POSSESSION_MAP.put(k, 2);
         for (String k : new String[]{"under construction","under-construction","uc","ongoing",
